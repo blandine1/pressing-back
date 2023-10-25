@@ -5,7 +5,7 @@ import com.pressing.pressing.entity.AuthenticationRequest;
 import com.pressing.pressing.entity.AuthenticationResponse;
 
 public interface AuthenticationService {
-    AuthenticationResponse register(UtilisateurDto utilisateurDto);
+    UtilisateurDto signUp(UtilisateurDto utilisateurDto);
 
-    AuthenticationResponse authenticate(AuthenticationRequest request);
+    //AuthenticationResponse authenticate(AuthenticationRequest request);
 }

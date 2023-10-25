@@ -1,57 +1,68 @@
 package com.pressing.pressing.services.impl;
 
+import com.pressing.pressing.config.JwtService;
+import com.pressing.pressing.dto.UtilisateurDto;
+import com.pressing.pressing.entity.Role;
+import com.pressing.pressing.repository.UtilisateurRepository;
+import com.pressing.pressing.services.AuthenticationService;
 import lombok.Builder;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 @Builder
-public class AuthenticationServiceImpl {
-/*
+public class AuthenticationServiceImpl implements AuthenticationService {
+
     private final UtilisateurRepository utilisateurRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
 
     @Autowired
-    public AuthenticationServiceImpl(UtilisateurRepository utilisateurRepository, PasswordEncoder passwordEncoder, JwtService jwtService, AuthenticationManager authenticationManager) {
+    public AuthenticationServiceImpl(UtilisateurRepository utilisateurRepository,
+                                     PasswordEncoder passwordEncoder,
+                                     JwtService jwtService,
+                                     AuthenticationManager authenticationManager
+    ) {
         this.utilisateurRepository = utilisateurRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtService = jwtService;
         this.authenticationManager = authenticationManager;
     }
 
+
     @Override
-    public AuthenticationResponse register(UtilisateurDto utilisateurDto) {
+    public UtilisateurDto signUp(UtilisateurDto utilisateurDto) {
         var user = UtilisateurDto.builder()
                 .name(utilisateurDto.getName())
                 .prenom(utilisateurDto.getPrenom())
                 .email(utilisateurDto.getEmail())
                 .dateDeNaissance(utilisateurDto.getDateDeNaissance())
+                .role(Role.ADMIN)
                 .password(passwordEncoder.encode(utilisateurDto.getPassword()))
-                .idRoles(utilisateurDto.getIdRoles())
                 .build();
-            UtilisateurDto.fromEntity(utilisateurRepository.save(UtilisateurDto.toEntity(user)));
-            var jwtToken = jwtService.generateToken(UtilisateurDto.toEntity(user));
-        return AuthenticationResponse.builder()
-                .token(jwtToken)
-                .build();
+
+         return UtilisateurDto.fromEntity(utilisateurRepository.save(UtilisateurDto.toEntity(user)));
     }
 
-    @Override
-    public AuthenticationResponse authenticate(AuthenticationRequest request) {
-        //System.out.println(request);
-       authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        request.getEmail(),
-                        request.getPassword()
-                )
-        );
-        System.out.println(request);
-        var user = utilisateurRepository.findByEmail(request.getEmail())
-                .orElseThrow();
-        var jwtToken = jwtService.generateToken((user));
-        return AuthenticationResponse.builder()
-                .token(jwtToken)
-                .build();
-    }*/
+//    @Override
+//    public UtilisateurDto authenticate(UtilisateurDto request) {
+//
+//       authenticationManager.authenticate(
+//                new UsernamePasswordAuthenticationToken(
+//                        request.getEmail(),
+//                        request.getPassword()
+//                )
+//        );
+//        System.out.println(request);
+//        var user = utilisateurRepository.findByEmail(request.getEmail())
+//                .orElseThrow();
+//        var jwtToken = jwtService.generateToken((user));
+//        return AuthenticationResponse.builder()
+//                .token(jwtToken)
+//                .build();
+//    }
 }

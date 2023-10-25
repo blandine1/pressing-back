@@ -1,6 +1,7 @@
 package com.pressing.pressing.services;
 
 import com.pressing.pressing.dto.UtilisateurDto;
+import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.util.List;
 
@@ -10,4 +11,5 @@ public interface UtilisateurService {
     UtilisateurDto findByName(String name);
     List<UtilisateurDto> findAll();
     void delete(Integer id);
+     UserDetailsService userDetailService();
 }

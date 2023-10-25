@@ -5,9 +5,13 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.apache.logging.log4j.CloseableThreadContext;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
@@ -15,6 +19,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@ToString
 @Table(name = "produit")
 public class Produit implements Serializable {
     @Id
@@ -36,7 +41,13 @@ public class Produit implements Serializable {
 
     private String description;
 
-    private Date  creationDate;
+    @CreationTimestamp
+    @Column(name = "creationDate", nullable = false, updatable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    private Timestamp creationDate;
+
+    @UpdateTimestamp
+    private Timestamp lastUpdatedDate;
 
     @JsonIgnore
     @OneToMany(mappedBy = "produit")

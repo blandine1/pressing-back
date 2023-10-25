@@ -4,8 +4,14 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -15,7 +21,7 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @Table(name = "utilisateur")
-public class Utilisateur {
+public class Utilisateur implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -38,22 +44,25 @@ public class Utilisateur {
     @Column(name = "photo")
     private String photo;
 
-    @Enumerated(EnumType.STRING)
+    //@Enumerated(EnumType.STRING)
     private Role role;
 
     private boolean status;
 
-    private Integer idRoles;
+    @CreationTimestamp
+    @Column(name = "creationDate", nullable = false, updatable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    private Timestamp creationDate;
 
-   /* @Override
+    @UpdateTimestamp
+    private Timestamp lastUpdatedDate;
+
+
+    @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(role.name()));
     }
 
-    @Override
-    public String getPassword() {
-        return password;
-    }
 
     @Override
     public String getUsername() {
@@ -77,6 +86,6 @@ public class Utilisateur {
 
     @Override
     public boolean isEnabled() {
-        return false;
-    }*/
+        return true;
+    }
 }

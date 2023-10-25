@@ -14,7 +14,7 @@ public interface UtilisateurApi {
     @PostMapping(value = APP_ROOT + "/utilisateur/create", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     UtilisateurDto save(@RequestBody UtilisateurDto utilisateurDto);
 
-    @GetMapping(value = APP_ROOT + "/utilisateur/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = APP_ROOT + "/utilisateur/find/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     UtilisateurDto findById(@PathVariable Integer id);
 
     @GetMapping(value = APP_ROOT + " /utilisateur/{name}", produces = MediaType.APPLICATION_JSON_VALUE)

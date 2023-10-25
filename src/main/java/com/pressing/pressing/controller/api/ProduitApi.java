@@ -16,14 +16,24 @@ public interface ProduitApi {
 
     @PostMapping(value = APP_ROOT+ "/produit/create", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     ProduitDto save(@RequestBody ProduitDto produitDto);
+    @PutMapping(value = APP_ROOT+ "/produit/update", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    ProduitDto update(@RequestBody ProduitDto produitDto);
+    @GetMapping(value = APP_ROOT+"/produit/alltrue/{phone}",produces = MediaType.APPLICATION_JSON_VALUE)
+    List<ProduitDto> findAllByPhoneNumberTrue(@PathVariable String phone);
+
+    @GetMapping(value = APP_ROOT+"/produit/allfalse/{phone}",produces = MediaType.APPLICATION_JSON_VALUE)
+    List<ProduitDto> findAllByPhoneNumberFalse(@PathVariable String phone);
 
     @GetMapping(value = APP_ROOT+"/produit/find/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     ProduitDto findById(@PathVariable Integer id);
 
+    @GetMapping(value = APP_ROOT+"/produit/findProduitLigneCommande/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    ProduitDto findByIdAndLigneProduit(@PathVariable Integer id);
+
     @GetMapping(value = APP_ROOT+"/produit/all",produces = MediaType.APPLICATION_JSON_VALUE)
     List<ProduitDto> findAll();
 
-    @PatchMapping(value = APP_ROOT+"/produit/update/{id}",produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = APP_ROOT+"/produit/updateTrue/{id}",produces = MediaType.APPLICATION_JSON_VALUE)
     ProduitDto updateStatut(@PathVariable Integer id);
 
     @PatchMapping(value = APP_ROOT+"/produit/update/{id}/{idLigneCommende}/{quantite}",produces = MediaType.APPLICATION_JSON_VALUE)

@@ -12,12 +12,17 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.test.annotation.Rollback;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+@Rollback(value = false)
 public class ProduitTest {
     
     @Autowired
@@ -39,7 +44,7 @@ public class ProduitTest {
         Client client = clientRepository.findById(clientId).get();
 
         Produit  produit= new Produit();
-        produit.setClientid(1);
+        //produit.setClientid(1);
         produit.setCreationDate(new Date());
         produit.setStatus(false);
         produit.setUtilisateurid(1);
@@ -51,6 +56,20 @@ public class ProduitTest {
         ligneproduit1.setQuantite(BigDecimal.valueOf(3));
         ligneproduit1.setServices(services);
 
+    }
+
+    public void testGetProduitAndLigneProduit(){
+
+        Produit produit = produitRepository.findById(4).get();
+        //List<Ligneproduit> allByProduitId = ligneProduitRepository.findAllByProduitId(4);
+       // for (Ligneproduit ligneproduit : allByProduitId) {
+        //    System.out.println("ligne ///////////// "+ligneproduit);
+       // }
+        //System.out.println(" ///////  "+produit);
+
+
+        assertNotNull(produit.getId());
+       // assertNotNull(allByProduitId);
     }
 
 }

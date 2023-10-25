@@ -8,17 +8,20 @@ import com.pressing.pressing.exception.InvalidEntityException;
 import com.pressing.pressing.repository.ClientRepository;
 import com.pressing.pressing.services.ClientService;
 import com.pressing.pressing.validator.ClientValidator;
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 @Slf4j
+@Transactional
 public class ClientServiceImpl implements ClientService {
     private final ClientRepository  clientRepository;
 

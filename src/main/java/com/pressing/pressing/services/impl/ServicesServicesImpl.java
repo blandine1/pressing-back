@@ -7,6 +7,7 @@ import com.pressing.pressing.exception.InvalidEntityException;
 import com.pressing.pressing.repository.ServiceRepository;
 import com.pressing.pressing.services.ServicesServices;
 import com.pressing.pressing.validator.ServicesValidator;
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,7 @@ import java.util.stream.Collectors;
 
 @Service
 @Slf4j
+@Transactional
 public class ServicesServicesImpl implements ServicesServices {
 
     private final ServiceRepository serviceRepository;
@@ -29,6 +31,7 @@ public class ServicesServicesImpl implements ServicesServices {
 
     @Override
     public ServiceDto save(ServiceDto serviceDto) {
+        serviceDto.setUtilisateurid(1);
         ServicesValidator c = new ServicesValidator();
         List<String> errors = c.validator(serviceDto);
         if(!errors.isEmpty()){

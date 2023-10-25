@@ -4,6 +4,8 @@ import com.pressing.pressing.entity.Client;
 import lombok.Builder;
 import lombok.Data;
 
+import java.sql.Timestamp;
+
 @Data
 @Builder
 public class ClientDto {
@@ -11,6 +13,9 @@ public class ClientDto {
     private String firstName;
     private String lastName;
     private String phoneNumber;
+    private Timestamp creationDate;
+    private Timestamp lastUpdatedDate;
+    private String description;
 
     public static  ClientDto fromEntity(Client client){
         if(client == null){
@@ -22,6 +27,8 @@ public class ClientDto {
                 .firstName(client.getFirstName())
                 .lastName(client.getLastName())
                 .phoneNumber(client.getPhoneNumber())
+                .creationDate(client.getCreationDate())
+                .lastUpdatedDate(client.getLastUpdatedDate())
                 .build();
     }
 
@@ -35,6 +42,8 @@ public class ClientDto {
         client.setFirstName(clientDto.getFirstName());
         client.setLastName(clientDto.getLastName());
         client.setPhoneNumber(clientDto.getPhoneNumber());
+        client.setCreationDate(clientDto.getCreationDate());
+        client.setLastUpdatedDate(clientDto.getLastUpdatedDate());
         return client;
 
     }

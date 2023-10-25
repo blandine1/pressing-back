@@ -7,8 +7,12 @@ import com.pressing.pressing.exception.InvalidEntityException;
 import com.pressing.pressing.repository.UtilisateurRepository;
 import com.pressing.pressing.services.UtilisateurService;
 import com.pressing.pressing.validator.UtilisateurValidator;
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -18,6 +22,7 @@ import java.util.stream.Collectors;
 
 @Service
 @Slf4j
+@Transactional
 public class UtilisateurServiceImpl implements UtilisateurService {
     private final UtilisateurRepository utilisateurRepository;
 
@@ -77,5 +82,15 @@ public class UtilisateurServiceImpl implements UtilisateurService {
             return;
         }
         utilisateurRepository.deleteById(id);
+    }
+
+    @Override
+    public UserDetailsService userDetailService(){
+        return  new UserDetailsService() {
+            @Override
+            public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+                return utilisateurRepository.findByEmail(username).orElseThrow(()->new UsernameNotFoundException("user not found"));
+            }
+        };
     }
 }

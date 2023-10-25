@@ -2,15 +2,18 @@ package com.pressing.pressing.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.pressing.pressing.entity.Ligneproduit;
-import com.pressing.pressing.entity.Produit;
 import lombok.*;
 
 import java.math.BigDecimal;
+import java.sql.Time;
+import java.sql.Timestamp;
+import java.util.Date;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 @Builder
 public class LigneProduitDto {
     private Integer id;
@@ -21,6 +24,12 @@ public class LigneProduitDto {
     private String vetement;
     private Integer id_produit;
     private Double prixTotalPartiel;
+    private boolean status;
+    //private Timestamp creationDate;
+    //private Timestamp lastUpdatedDate;
+
+    private Date creationDate;
+    private Date lastUpdatedDate;
     @JsonIgnore
     private CategoryDto categoryDto;
 
@@ -37,6 +46,10 @@ public class LigneProduitDto {
                 .service(ServiceDto.fromEntity(ligneproduit.getServices()))
                 .description(ligneproduit.getDescription())
                 .vetement(ligneproduit.getVetement())
+                .prixTotalPartiel(ligneproduit.getPrixTotalPartiel())
+                .status(ligneproduit.isStatus())
+                .creationDate(ligneproduit.getCreationDate())
+                .lastUpdatedDate(ligneproduit.getLastUpdatedDate())
                 .build();
     }
 
@@ -51,7 +64,11 @@ public class LigneProduitDto {
         ligneProduit.setVetement(ligneProduitDto.getVetement());
         ligneProduit.setDescription(ligneProduitDto.getDescription());
         ligneProduit.setId_produit(ligneProduit.getId_produit());
+        ligneProduit.setPrixTotalPartiel(ligneProduitDto.getPrixTotalPartiel());
         ligneProduit.setServices(ServiceDto.toEntity(ligneProduitDto.getService()));
+        ligneProduit.setStatus(ligneProduitDto.isStatus());
+        ligneProduit.setCreationDate(ligneProduitDto.getCreationDate());
+        ligneProduit.setLastUpdatedDate(ligneProduitDto.getLastUpdatedDate());
 
         return ligneProduit;
     }

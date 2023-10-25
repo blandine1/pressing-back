@@ -16,20 +16,21 @@ import com.pressing.pressing.repository.*;
 import com.pressing.pressing.services.ProduitService;
 import com.pressing.pressing.validator.ProduitValidator;
 import com.pressing.pressing.validator.ServicesValidator;
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.Errors;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
 @Slf4j
+@Transactional
 public class ProduitServiceImpl implements ProduitService {
     private final ProduitRepository produitRepository;
     private final ServiceRepository serviceRepository;
@@ -37,9 +38,17 @@ public class ProduitServiceImpl implements ProduitService {
     private final UtilisateurRepository utilisateurRepository;
     private final LigneProduitRepository ligneProduitRepository;
     private final ClientRepository clientRepository;
+   // private final PaginationRepository paginationRepository;
 
     @Autowired
-    public ProduitServiceImpl(ProduitRepository produitRepository, ServiceRepository serviceRepository, CategorieRepository categorieRepository, UtilisateurRepository utilisateurRepository, LigneProduitRepository ligneProduitRepository, ClientRepository clientRepository) {
+    public ProduitServiceImpl(ProduitRepository produitRepository,
+                              ServiceRepository serviceRepository,
+                              CategorieRepository categorieRepository,
+                              UtilisateurRepository utilisateurRepository,
+                              LigneProduitRepository ligneProduitRepository,
+                              ClientRepository clientRepository)
+    {
+
         this.produitRepository = produitRepository;
         this.serviceRepository = serviceRepository;
         this.categorieRepository = categorieRepository;
@@ -48,12 +57,8 @@ public class ProduitServiceImpl implements ProduitService {
         this.clientRepository = clientRepository;
     }
 
-
     @Override
     public ProduitDto save(ProduitDto produitDto) {
-
-        System.out.println(produitDto);
-
         ProduitValidator produitValidator=new ProduitValidator();
         List<String> errors = produitValidator.validator(produitDto);
         if(!errors.isEmpty()){
@@ -61,8 +66,6 @@ public class ProduitServiceImpl implements ProduitService {
             throw new InvalidEntityException("le produit est invalide", ErrorCode.PRODUIT_NOT_VALID);
         }
 
-        // il faut en fait que l'utilisateur soit enregistré ar defaut
-      System.out.println("////////////////////////// "+produitDto);
         List<String> servicesErrors = new ArrayList<>();
         if(produitDto.getListeLigneProduit() !=null){
             produitDto.getListeLigneProduit().forEach(p->{
@@ -79,9 +82,8 @@ public class ProduitServiceImpl implements ProduitService {
             throw new InvalidEntityException("le service n'existe pas dans cette BD ", ErrorCode.SERVICE_NOT_FOUND, servicesErrors);
         }
 
-        //a changer lors de la securite
         produitDto.setUtilisateurid(1);
-        produitDto.setCreationDate(new Date());
+
         Produit saveDproduit = produitRepository.save(ProduitDto.toEntity(produitDto));
 
         if(produitDto.getListeLigneProduit() != null){
@@ -89,12 +91,63 @@ public class ProduitServiceImpl implements ProduitService {
                 Ligneproduit ligneproduit = LigneProduitDto.toEntity(lgnePt);
                 ligneproduit.setProduit(saveDproduit);
                 ligneproduit.setId_produit(saveDproduit.getId());
+                ligneproduit.setCreationDate(new Date());
+                ligneproduit.setLastUpdatedDate(new Date());
                 ligneProduitRepository.save(ligneproduit);
             });
         }
 
         return ProduitDto.fromEntity(saveDproduit);
     }
+
+    @Override
+    public ProduitDto update(ProduitDto produitDto) {
+
+        System.out.println(produitDto.getListeLigneProduit());
+
+        ProduitValidator produitValidator=new ProduitValidator();
+        List<String> errors = produitValidator.validator(produitDto);
+        if(!errors.isEmpty()){
+            log.error("le produit est invalide");
+            throw new InvalidEntityException("le produit est invalide", ErrorCode.PRODUIT_NOT_VALID);
+        }
+
+        List<String> servicesErrors = new ArrayList<>();
+        if(produitDto.getListeLigneProduit() !=null){
+            produitDto.getListeLigneProduit().forEach(p->{
+                if(p.getService() != null){
+                    Optional<Services> optional = serviceRepository.findById(p.getService().getId());
+                    if (optional.isEmpty()){
+                        servicesErrors.add("le service avec cet Id "+ p.getService().getId() +" n'est pas disponible");
+                    }
+                }
+            });
+        }
+        if(!servicesErrors.isEmpty()){
+            log.error("");
+            throw new InvalidEntityException("le service n'existe pas dans cette BD ", ErrorCode.SERVICE_NOT_FOUND, servicesErrors);
+        }
+
+        produitDto.setUtilisateurid(1);
+
+        Produit saveDproduit = produitRepository.save(ProduitDto.toEntity(produitDto));
+
+        if(produitDto.getListeLigneProduit() != null){
+            produitDto.getListeLigneProduit().forEach(lgnePt->{
+                Ligneproduit ligneproduit1 = ligneProduitRepository.findById(lgnePt.getId()).get();
+
+                Ligneproduit ligneproduit = LigneProduitDto.toEntity(lgnePt);
+                ligneproduit.setProduit(saveDproduit);
+                ligneproduit.setId_produit(saveDproduit.getId());
+                if (lgnePt.isStatus() &&  !ligneproduit1.isStatus()){
+                    ligneproduit.setLastUpdatedDate(new Date());
+                }
+                ligneProduitRepository.save(ligneproduit);
+            });
+        }
+        return ProduitDto.fromEntity(saveDproduit);
+    }
+
 
     @Override
     public ProduitDto findById(Integer id) {
@@ -106,8 +159,24 @@ public class ProduitServiceImpl implements ProduitService {
                 .map(ProduitDto:: fromEntity)
                 .orElseThrow(()->new EntityNotFoundException("Aucun produit n'est disponible avec cet Id " +id, ErrorCode.SERVICE_NOT_FOUND));
     }
+    @Override
+    public ProduitDto findByIdAndLigneProduit(Integer id){
+        if(id == null){
+            log.error("Aucun produit n'est disponible avec cet Id " + id );
+            return null;
+        }
 
-    //retourne la list des ligne de produit appartenant a un produit
+        Produit produit = produitRepository.findById(id).get();
+
+        ProduitDto produitDto = ProduitDto.fromEntity(produit);
+
+        List<LigneProduitDto> collect = ligneProduitRepository.findAllByProduitId(id).stream().map(LigneProduitDto::fromEntity).collect(Collectors.toList());
+
+        produitDto.setListeLigneProduit(collect);
+
+        return produitDto;
+    }
+
     @Override
     public List<LigneProduitDto> findAllLigneProduitByProduitId(Integer idProduit) {
         return ligneProduitRepository.findAllByProduitId(idProduit).stream()
@@ -147,9 +216,8 @@ public class ProduitServiceImpl implements ProduitService {
             throw new InvalidOperationException("Impossible de valider cette operation avec le id null");
         }
        ProduitDto produitDto = findById(id);
-       produitDto.setStatus(true);
-
-        return ProduitDto.fromEntity(produitRepository.save(ProduitDto.toEntity(produitDto)));
+        Produit produit = produitRepository.updateByStatusAndTrue(produitDto.getId());
+        return ProduitDto.fromEntity(produit);
     }
 
     @Override
@@ -171,9 +239,14 @@ public class ProduitServiceImpl implements ProduitService {
         return ProduitDto.fromEntity(produitRepository.save(ProduitDto.toEntity(produitDto)));
     }
 
-
     @Override
     public List<ProduitDto> findAll() {
+//        Page<Produit> byCreationDate = paginationRepository.findAllOrOrderByCreationDate(PageRequest.of(0, 2));
+//        Map<String, Object> res = new HashMap<>();
+//        res.put("produit", byCreationDate.getContent());
+//        res.put("current-page",byCreationDate.getNumber());
+//        res.put("total-items",byCreationDate.getTotalElements());
+//        res.put("total-pages",byCreationDate.getTotalPages());
         return produitRepository.findAll().stream()
                 .map(ProduitDto::fromEntity)
                 .collect(Collectors.toList());
@@ -184,7 +257,6 @@ public class ProduitServiceImpl implements ProduitService {
         List<Produit> produitDtoList = produitRepository.findAllByStatusIsTrue();
         if (produitDtoList.isEmpty()){
             log.error("La liste est vide");
-            //throw new EntityNotFoundException("list is empty", ErrorCode.PRODUIT_NOT_FOUND);
         }
         List<ProduitDto> dtoList = new ArrayList<>();
         produitDtoList.forEach(p ->{
@@ -199,7 +271,6 @@ public class ProduitServiceImpl implements ProduitService {
         List<Produit> produitDtoList = produitRepository.findAllByStatusIsFalse();
         if (produitDtoList.isEmpty()){
             log.error("La liste est vide");
-            //throw new EntityNotFoundException("list is empty", ErrorCode.PRODUIT_NOT_FOUND);
         }
         List<ProduitDto> dtoList = new ArrayList<>();
         produitDtoList.forEach(p ->{
@@ -277,4 +348,39 @@ public class ProduitServiceImpl implements ProduitService {
        }
        produitRepository.deleteById(id);
     }
+
+    @Override
+    public List<ProduitDto> findAllByPhoneNumberTrue(String phone) {
+        if (phone.isEmpty()){
+            log.error("Aucun produit avec ce numero de telephone " +phone);
+        }
+        List<ProduitDto> produits = new ArrayList<>();
+        List<Produit> allAndTrue = produitRepository.findAllAndTrue(phone);
+
+        allAndTrue.forEach(p->{
+            ProduitDto produitDto = ProduitDto.fromEntity(p);
+            produits.add(produitDto);
+        });
+
+        return produits;
+    }
+
+    @Override
+    public List<ProduitDto> findAllByPhoneNumberFalse(String phone) {
+        System.out.println("//////////////////////////////// " + phone);
+        if (phone.isEmpty()){
+            log.error("Aucun produit avec ce numero de telephone " +phone);
+        }
+        List<ProduitDto> produits = new ArrayList<>();
+        List<Produit> allAndTrue = produitRepository.findAllAndFalse(phone);
+
+        allAndTrue.forEach(p->{
+            ProduitDto produitDto = ProduitDto.fromEntity(p);
+            produits.add(produitDto);
+        });
+
+        return produits;
+    }
+
+
 }

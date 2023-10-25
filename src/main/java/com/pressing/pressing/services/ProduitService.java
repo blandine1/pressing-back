@@ -7,13 +7,20 @@ import java.math.BigDecimal;
 import java.util.List;
 
 public interface ProduitService {
+
+
     ProduitDto save(ProduitDto produitDto);
+
+    ProduitDto update(ProduitDto produitDto);
+
     ProduitDto findById(Integer id);
     ProduitDto updateStatut(Integer id);
     ProduitDto updateQuantiteProduit(Integer id, Integer idLigneCommende, BigDecimal quantite);
     ProduitDto updateClient(Integer idProduit, Integer idClient);
     //ProduitDto alltrue(Integer idProduit);
     //ProduitDto allFalse(Integer idProduit);
+
+    ProduitDto findByIdAndLigneProduit(Integer id);
 
     List<LigneProduitDto> findAllLigneProduitByProduitId(Integer idProduit);
 
@@ -25,4 +32,7 @@ public interface ProduitService {
     List<ProduitDto> findAllFalse();
     List<ProduitDto> findAll();
     void delete(Integer id);
+
+    List<ProduitDto> findAllByPhoneNumberTrue(String phone);
+    List<ProduitDto> findAllByPhoneNumberFalse(String phone);
 }

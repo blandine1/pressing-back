@@ -27,8 +27,27 @@ public class ProduitController implements ProduitApi {
     }
 
     @Override
+    public ProduitDto update(ProduitDto produitDto) {
+        return produitService.update(produitDto);
+    }
+
+    @Override
+    public List<ProduitDto> findAllByPhoneNumberTrue(String phone) {
+        return produitService.findAllByPhoneNumberTrue(phone);
+    }
+
+    @Override
+    public List<ProduitDto> findAllByPhoneNumberFalse(String phone) {
+        return produitService.findAllByPhoneNumberFalse(phone);
+    }
+
+    @Override
     public ProduitDto findById(Integer id) {
         return produitService.findById(id);
+    }
+
+    public ProduitDto findByIdAndLigneProduit(Integer id){
+        return produitService.findByIdAndLigneProduit(id);
     }
 
     @Override
@@ -80,4 +99,6 @@ public class ProduitController implements ProduitApi {
     public void delete(Integer id) {
         produitService.delete(id);
     }
+
+
 }
