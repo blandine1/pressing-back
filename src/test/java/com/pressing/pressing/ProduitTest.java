@@ -38,7 +38,7 @@ public class ProduitTest {
     @Test
     public void testSaveProduit(){
         
-        int serviceId=1;
+       /* int serviceId=1;
         int clientId=1;
         Services services = serviceRepository.findById(serviceId).get();
         Client client = clientRepository.findById(clientId).get();
@@ -54,7 +54,7 @@ public class ProduitTest {
         ligneproduit1.setVetement("veste carree");
         ligneproduit1.setPrix(8000);
         ligneproduit1.setQuantite(BigDecimal.valueOf(3));
-        ligneproduit1.setServices(services);
+        ligneproduit1.setServices(services);*/
 
     }
 

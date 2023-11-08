@@ -1,11 +1,16 @@
 package com.pressing.pressing.services;
 
-import com.pressing.pressing.dto.UtilisateurDto;
-import com.pressing.pressing.entity.AuthenticationRequest;
-import com.pressing.pressing.entity.AuthenticationResponse;
+import com.pressing.pressing.dto.*;
+import com.pressing.pressing.entity.Utilisateur;
 
 public interface AuthenticationService {
-    UtilisateurDto signUp(UtilisateurDto utilisateurDto);
+    //UtilisateurDto signUp(UtilisateurDto utilisateurDto);
 
-    //AuthenticationResponse authenticate(AuthenticationRequest request);
+    JwtAuthenticationResponse refereshToken(RefreshTokenRequest tokenRequest);
+
+    //UtilisateurDto signup(UtilisateurDto utilisateurDto);
+
+    Utilisateur signup(SignUpRequest signUpRequest);
+
+    JwtAuthenticationResponse authenticate(SignInRequest signInRequest);
 }

@@ -12,50 +12,51 @@ import java.util.List;
 import static com.pressing.pressing.utils.Constants.APP_ROOT;
 
 @CrossOrigin(origins = "*")
+@RequestMapping("/gestionpressing/v1/caissiere")
 public interface ProduitApi {
 
-    @PostMapping(value = APP_ROOT+ "/produit/create", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value="/produit/create", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     ProduitDto save(@RequestBody ProduitDto produitDto);
-    @PutMapping(value = APP_ROOT+ "/produit/update", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value="/produit/update", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     ProduitDto update(@RequestBody ProduitDto produitDto);
-    @GetMapping(value = APP_ROOT+"/produit/alltrue/{phone}",produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value="/produit/alltrue/{phone}",produces = MediaType.APPLICATION_JSON_VALUE)
     List<ProduitDto> findAllByPhoneNumberTrue(@PathVariable String phone);
 
-    @GetMapping(value = APP_ROOT+"/produit/allfalse/{phone}",produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value="/produit/allfalse/{phone}",produces = MediaType.APPLICATION_JSON_VALUE)
     List<ProduitDto> findAllByPhoneNumberFalse(@PathVariable String phone);
 
-    @GetMapping(value = APP_ROOT+"/produit/find/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value="/produit/find/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     ProduitDto findById(@PathVariable Integer id);
 
-    @GetMapping(value = APP_ROOT+"/produit/findProduitLigneCommande/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value="/produit/findProduitLigneCommande/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     ProduitDto findByIdAndLigneProduit(@PathVariable Integer id);
 
-    @GetMapping(value = APP_ROOT+"/produit/all",produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value="/produit/all",produces = MediaType.APPLICATION_JSON_VALUE)
     List<ProduitDto> findAll();
 
-    @PutMapping(value = APP_ROOT+"/produit/updateTrue/{id}",produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value="/produit/updateTrue/{id}",produces = MediaType.APPLICATION_JSON_VALUE)
     ProduitDto updateStatut(@PathVariable Integer id);
 
-    @PatchMapping(value = APP_ROOT+"/produit/update/{id}/{idLigneCommende}/{quantite}",produces = MediaType.APPLICATION_JSON_VALUE)
+    @PatchMapping(value="/produit/update/{id}/{idLigneCommende}/{quantite}",produces = MediaType.APPLICATION_JSON_VALUE)
     ProduitDto updateQuantiteProduit(@PathVariable Integer id, @PathVariable Integer idLigneCommende,@PathVariable  BigDecimal quantite);
 
-    @PatchMapping(value = APP_ROOT+"/produit/update/{id}/{idClient}",produces = MediaType.APPLICATION_JSON_VALUE)
+    @PatchMapping(value="/produit/update/{id}/{idClient}",produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<ProduitDto> updateClient(@PathVariable Integer id, @PathVariable Integer idClient);
 
-    @GetMapping(value = APP_ROOT+"/produit/true/allTrue",produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value="/produit/true/allTrue",produces = MediaType.APPLICATION_JSON_VALUE)
     List<ProduitDto> findAllTrue();
 
-    @GetMapping(value = APP_ROOT+"/produit/false/allFalse",produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value="/produit/false/allFalse",produces = MediaType.APPLICATION_JSON_VALUE)
     List<ProduitDto> findAllFalse();
 
-    @PatchMapping(value = APP_ROOT+"/produit/update/service/{idProduit}/{idLigneProduit}/{idService}",produces = MediaType.APPLICATION_JSON_VALUE)
+    @PatchMapping(value="/produit/update/service/{idProduit}/{idLigneProduit}/{idService}",produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<ProduitDto> updateService(@PathVariable("idProduit") Integer idProduit, @PathVariable("idLigneProduit") Integer idLigneProduit,@PathVariable("idService")  Integer idService);
-    @DeleteMapping(APP_ROOT+"/produit/delete/{idProduit}")
+    @DeleteMapping(value="/produit/delete/{idProduit}", produces = MediaType.APPLICATION_JSON_VALUE)
     void delete(@PathVariable("idProduit") Integer id);
 
-    @GetMapping(value = APP_ROOT+"/produit/ligneProduit/{idProduit}",produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value="/produit/ligneProduit/{idProduit}",produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<List<LigneProduitDto>> findAllLigneProduitByProduitId(@PathVariable("idProduit") Integer idProduit);
 
-    @DeleteMapping(value = APP_ROOT+"/produit/delete/{idProduit}/{idLigneProduit}",produces = MediaType.APPLICATION_JSON_VALUE)
+    @DeleteMapping(value="/produit/delete/{idProduit}/{idLigneProduit}",produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<ProduitDto> deleteProduit(@PathVariable("idProduit") Integer idProduit,@PathVariable("idLigneProduit") Integer idLigneProduit);
 }

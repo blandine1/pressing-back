@@ -6,39 +6,31 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
-import java.io.Serializable;
+
 import java.sql.Timestamp;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
 @Entity
 @Table(name = "utilisateur")
-public class Utilisateur implements UserDetails {
+//implements UserDetails
+public class Utilisateur {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "name")
     private String name;
 
-    @Column(name = "prenom")
     private String prenom;
 
-    @Column(name = "email")
     private String email;
 
     @Column(name = "date_naissance")
     private Date dateDeNaissance;
 
-    @Column(name = "password")
     private String password;
 
     @Column(name = "photo")
@@ -47,7 +39,8 @@ public class Utilisateur implements UserDetails {
     //@Enumerated(EnumType.STRING)
     private Role role;
 
-    private boolean status;
+    //@Column(name = "statut")
+    private boolean statut;
 
     @CreationTimestamp
     @Column(name = "creationDate", nullable = false, updatable = false)
@@ -57,13 +50,10 @@ public class Utilisateur implements UserDetails {
     @UpdateTimestamp
     private Timestamp lastUpdatedDate;
 
-
-    @Override
+   /* @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(role.name()));
     }
-
-
     @Override
     public String getUsername() {
         return email;
@@ -87,5 +77,5 @@ public class Utilisateur implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
-    }
+    }*/
 }

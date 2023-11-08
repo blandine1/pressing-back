@@ -7,13 +7,10 @@ import com.pressing.pressing.exception.InvalidEntityException;
 import com.pressing.pressing.repository.UtilisateurRepository;
 import com.pressing.pressing.services.UtilisateurService;
 import com.pressing.pressing.validator.UtilisateurValidator;
-import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
@@ -48,6 +45,7 @@ public class UtilisateurServiceImpl implements UtilisateurService {
         if (id == null){
             log.error("cet utilisateur avec le ID " + id + " n'existe pas");
         }
+        System.out.println("///////////////////////////////" + id);
         Optional<Utilisateur> u =  utilisateurRepository.findById(id);
         UtilisateurDto utilisateurDto = UtilisateurDto.fromEntity(u.get());
 
@@ -84,13 +82,13 @@ public class UtilisateurServiceImpl implements UtilisateurService {
         utilisateurRepository.deleteById(id);
     }
 
-    @Override
+   /* @Override
     public UserDetailsService userDetailService(){
         return  new UserDetailsService() {
             @Override
             public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-                return utilisateurRepository.findByEmail(username).orElseThrow(()->new UsernameNotFoundException("user not found"));
+                return (UserDetails) utilisateurRepository.findByEmail(username).orElseThrow(()->new UsernameNotFoundException("user not found"));
             }
         };
-    }
+    }*/
 }

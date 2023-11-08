@@ -1,7 +1,5 @@
 package com.pressing.pressing.dto;
 
-import com.pressing.pressing.entity.Categorie;
-import com.pressing.pressing.entity.Roles;
 import lombok.Builder;
 import lombok.Data;
 
@@ -13,7 +11,7 @@ public class RolesDto {
     private String description;
 
 
-    public static RolesDto fromEntity(Roles roles){
+  /*  public static RolesDto fromEntity(Roles roles){
         if(roles == null){
             return  null;
         }
@@ -36,5 +34,5 @@ public class RolesDto {
         roles.setDescription(rolesDto.getDescription());
 
         return roles;
-    }
+    }*/
 }

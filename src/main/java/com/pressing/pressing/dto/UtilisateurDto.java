@@ -17,7 +17,7 @@ public class UtilisateurDto {
     private String email;
     private Date dateDeNaissance;
     private String password;
-    private boolean status;
+    private boolean statut;
     private String photo;
     private Timestamp creationDate;
     private Timestamp lastUpdateDate;
@@ -38,7 +38,7 @@ public class UtilisateurDto {
                 .photo(utilisateur.getPhoto())
                 .creationDate(utilisateur.getCreationDate())
                 .lastUpdateDate(utilisateur.getLastUpdatedDate())
-                .status(utilisateur.isStatus())
+                .statut(utilisateur.isStatut())
                 .role(utilisateur.getRole())
                 .build();
     }
@@ -55,7 +55,7 @@ public class UtilisateurDto {
         utilisateur.setEmail(utilisateurDto.getEmail());
         utilisateur.setDateDeNaissance(utilisateurDto.getDateDeNaissance());
         utilisateur.setPassword(utilisateurDto.getPassword());
-        utilisateur.setStatus(utilisateurDto.isStatus());
+        utilisateur.setStatut(utilisateurDto.isStatut());
         utilisateur.setPhoto(utilisateurDto.getPhoto());
         utilisateur.setCreationDate(utilisateurDto.getCreationDate());
         utilisateur.setRole(utilisateurDto.getRole());

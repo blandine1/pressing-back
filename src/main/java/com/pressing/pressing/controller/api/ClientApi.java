@@ -9,31 +9,32 @@ import java.util.List;
 import static com.pressing.pressing.utils.Constants.APP_ROOT;
 
 @CrossOrigin(origins = "*")
+@RequestMapping("/gestionpressing/v1/caissiere")
 public interface ClientApi {
 
-    @PostMapping(value = APP_ROOT + "/client/create" ,consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value="/client/create" ,consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     ClientDto save(@RequestBody ClientDto clientDto);
 
-    @GetMapping(value = APP_ROOT + "/client/find/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value="/client/find/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     ClientDto findById(@PathVariable Integer id);
 
-    @GetMapping(value = APP_ROOT + "/client/{phoneNumber}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value="/client/{phoneNumber}", produces = MediaType.APPLICATION_JSON_VALUE)
     ClientDto findByPhoneNumber(@PathVariable String phoneNumber);
 
     /**
      *
      * @return
      */
-    @GetMapping(value = APP_ROOT + "/Client/all", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value="/Client/all", produces = MediaType.APPLICATION_JSON_VALUE)
     List<ClientDto> findAll();
 
     /**
      *
      * @param id
      */
-    @DeleteMapping(value = APP_ROOT + "/client/delete/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @DeleteMapping(value="/client/delete/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     void delete(@PathVariable Integer id);
 
-    @PostMapping(value = APP_ROOT + "/client/update/{id}" ,consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value="/client/update/{id}" ,consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     ClientDto update(@PathVariable Integer id, @RequestBody ClientDto clientDto);
 }

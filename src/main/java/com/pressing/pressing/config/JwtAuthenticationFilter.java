@@ -2,29 +2,26 @@ package com.pressing.pressing.config;
 
 import com.pressing.pressing.services.JWTService;
 import com.pressing.pressing.services.UtilisateurService;
+import io.micrometer.common.util.StringUtils;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
-@Component
-@RequiredArgsConstructor
+//@Component
+//@RequiredArgsConstructor
 //extends OncePerRequestFilter
-public class JwtAuthenticationFilter extends OncePerRequestFilter {
-
+public class JwtAuthenticationFilter {
+/*
     private final JWTService jwtService;
+
     private final UtilisateurService utilisateurService;
+
     @Override
     protected void doFilterInternal( HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
          final String authHeader = request.getHeader("Authorization");
@@ -32,16 +29,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
          String userEnail;
          if(StringUtils.isEmpty(authHeader) || !org.apache.commons.lang3.StringUtils.startsWith(authHeader,"Bearer ")){
             filterChain.doFilter(request, response);
+            return;
          }
 
-         if(authHeader == null || !authHeader.contains("Bearer ")){
-             filterChain.doFilter(request, response);
-             return;
-         }
          jwt = authHeader.substring(7);
          userEnail  = jwtService.extractUserName(jwt);
 
-         if(StringUtils.isNotEmpty(userEnail) && SecurityContextHolder.getContext().getAuthentication()==null){
+         if(StringUtils.isEmpty(userEnail) && SecurityContextHolder.getContext().getAuthentication()==null){
             UserDetails userDetails = utilisateurService.userDetailService().loadUserByUsername(userEnail);
 
             if(jwtService.isTokenValid(jwt, userDetails)){
@@ -54,5 +48,5 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             }
          }
          filterChain.doFilter(request, response);
-    }
+    }*/
 }
