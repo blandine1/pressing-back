@@ -42,6 +42,11 @@ public class ProduitController implements ProduitApi {
     }
 
     @Override
+    public List<ProduitDto> findAllAndIsLivreTrue(String phone) {
+        return produitService.findAllAndIsLivreTrue(phone);
+    }
+
+    @Override
     public ProduitDto findById(Integer id) {
         return produitService.findById(id);
     }
@@ -73,6 +78,11 @@ public class ProduitController implements ProduitApi {
     @Override
     public List<ProduitDto> findAllFalse() {
         return produitService.findAllFalse();
+    }
+
+    @Override
+    public List<ProduitDto> findBIsLivreTrue() {
+        return produitService.findBIsLivreTrue();
     }
 
     @Override

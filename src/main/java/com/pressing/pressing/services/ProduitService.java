@@ -30,9 +30,12 @@ public interface ProduitService {
 
     List<ProduitDto> findAllTrue();
     List<ProduitDto> findAllFalse();
+    List<ProduitDto> findBIsLivreTrue();
     List<ProduitDto> findAll();
-    void delete(Integer id);
 
+    void delete(Integer id);
     List<ProduitDto> findAllByPhoneNumberTrue(String phone);
     List<ProduitDto> findAllByPhoneNumberFalse(String phone);
+    List<ProduitDto> findAllAndIsLivreTrue(String phone);
+
 }

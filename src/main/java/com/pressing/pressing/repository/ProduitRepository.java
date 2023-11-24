@@ -1,7 +1,6 @@
 package com.pressing.pressing.repository;
 
 import com.pressing.pressing.entity.Produit;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -14,8 +13,20 @@ public interface ProduitRepository extends JpaRepository<Produit, Integer> {
 
     @Query("select p from Produit p where p.client.phoneNumber=?1 and p.status=false order by p.creationDate desc")
     List<Produit> findAllAndFalse(String phone);
-    List<Produit> findAllByStatusIsTrue();
+
+    @Query("select p from Produit p where p.client.phoneNumber=?1 and p.livre=true order by p.creationDate desc")
+    List<Produit> findAllAndIsLivreTrue(String phone);
+
+
+    @Query("select p from Produit p where p.livre=false order by p.creationDate desc")
+    List<Produit> findAllByLivreIsFalse();
+
+    @Query("select p from Produit p where p.status=false order by p.creationDate desc")
     List<Produit> findAllByStatusIsFalse();
+
+    @Query("select p from Produit p where p.livre=true order by p.creationDate desc")
+    List<Produit> findAllByLivreIsTrue();
+
 
     //@Query("select p from Produit p inner join Ligneproduit l on p.id=l.id_produit")
 //    @Query("select p.client.firstName,p.prixTotal from Produit p inner join Ligneproduit l on p.id=l.id_produit")

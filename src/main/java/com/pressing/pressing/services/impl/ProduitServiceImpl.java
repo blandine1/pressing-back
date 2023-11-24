@@ -19,9 +19,6 @@ import com.pressing.pressing.validator.ServicesValidator;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -103,14 +100,16 @@ public class ProduitServiceImpl implements ProduitService {
     @Override
     public ProduitDto update(ProduitDto produitDto) {
 
-        System.out.println(produitDto.getListeLigneProduit());
-
         ProduitValidator produitValidator=new ProduitValidator();
         List<String> errors = produitValidator.validator(produitDto);
         if(!errors.isEmpty()){
             log.error("le produit est invalide");
             throw new InvalidEntityException("le produit est invalide", ErrorCode.PRODUIT_NOT_VALID);
         }
+
+       /* if(!produitDto.isStatus() && produitDto.isLivre()){
+            throw new InvalidEntityException("Ce produit n'est pas encore payé", ErrorCode.PRODUIT_NOT_VALID);
+        }*/
 
         List<String> servicesErrors = new ArrayList<>();
         if(produitDto.getListeLigneProduit() !=null){
@@ -252,9 +251,14 @@ public class ProduitServiceImpl implements ProduitService {
                 .collect(Collectors.toList());
     }
 
+
+    /**
+     * recher avec le statut livre est a faux
+     * @return
+     */
     @Override
     public List<ProduitDto> findAllTrue() {
-        List<Produit> produitDtoList = produitRepository.findAllByStatusIsTrue();
+        List<Produit> produitDtoList = produitRepository.findAllByLivreIsFalse();
         if (produitDtoList.isEmpty()){
             log.error("La liste est vide");
         }
@@ -266,6 +270,11 @@ public class ProduitServiceImpl implements ProduitService {
         return dtoList;
     }
 
+
+    /**
+     * recher avec le statut status est a faux
+     * @return
+     */
     @Override
     public List<ProduitDto> findAllFalse() {
         List<Produit> produitDtoList = produitRepository.findAllByStatusIsFalse();
@@ -280,6 +289,28 @@ public class ProduitServiceImpl implements ProduitService {
         return dtoList;
     }
 
+    @Override
+    public List<ProduitDto> findBIsLivreTrue() {
+        List<Produit> produitDtoList = produitRepository.findAllByLivreIsTrue();
+        if (produitDtoList.isEmpty()){
+            log.error("La liste est vide");
+        }
+        List<ProduitDto> dtoList = new ArrayList<>();
+        produitDtoList.forEach(p ->{
+            dtoList.add(ProduitDto.fromEntity(p));
+        });
+
+        return dtoList;
+    }
+
+
+    /**
+     *
+     * @param idProduit
+     * @param idLigneProduit
+     * @param idService
+     * @return
+     */
     @Override
     public ProduitDto updateService(Integer idProduit, Integer idLigneProduit, Integer idService) {
         if (idProduit == null){
@@ -319,6 +350,13 @@ public class ProduitServiceImpl implements ProduitService {
         return produitDto;
     }
 
+
+    /**
+     *
+     * @param idProduit
+     * @param idLigneProduit
+     * @return
+     */
     @Override
     public ProduitDto deleteProduit(Integer idProduit, Integer idLigneProduit) {
         if (idProduit == null){
@@ -349,6 +387,12 @@ public class ProduitServiceImpl implements ProduitService {
        produitRepository.deleteById(id);
     }
 
+
+    /**
+     * on recher les produit d'un client deja payé
+     * @param phone
+     * @return
+     */
     @Override
     public List<ProduitDto> findAllByPhoneNumberTrue(String phone) {
         if (phone.isEmpty()){
@@ -365,6 +409,11 @@ public class ProduitServiceImpl implements ProduitService {
         return produits;
     }
 
+    /**
+     * on recher les produit d'un client aui nùq pas payé
+     * @param phone
+     * @return
+     */
     @Override
     public List<ProduitDto> findAllByPhoneNumberFalse(String phone) {
         System.out.println("//////////////////////////////// " + phone);
@@ -383,4 +432,25 @@ public class ProduitServiceImpl implements ProduitService {
     }
 
 
+    /**
+     * on recherche les produits d'un client deja payé et livre
+     * @param phone
+     * @return
+     */
+    @Override
+    public List<ProduitDto> findAllAndIsLivreTrue(String phone) {
+       //System.out.println("//////////////////////////////// " + phone);
+        if (phone.isEmpty()){
+            log.error("Aucun produit avec ce numero de telephone " +phone);
+        }
+        List<ProduitDto> produits = new ArrayList<>();
+        List<Produit> allAndIsLivreTrue = produitRepository.findAllAndIsLivreTrue(phone);
+
+        allAndIsLivreTrue.forEach(p->{
+            ProduitDto produitDto = ProduitDto.fromEntity(p);
+            produits.add(produitDto);
+        });
+
+        return produits;
+    }
 }

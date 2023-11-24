@@ -25,6 +25,9 @@ public interface ProduitApi {
     @GetMapping(value="/produit/allfalse/{phone}",produces = MediaType.APPLICATION_JSON_VALUE)
     List<ProduitDto> findAllByPhoneNumberFalse(@PathVariable String phone);
 
+    @GetMapping(value="/produit/livre/{phone}",produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<ProduitDto> findAllAndIsLivreTrue(@PathVariable String phone);
+
     @GetMapping(value="/produit/find/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     ProduitDto findById(@PathVariable Integer id);
 
@@ -48,6 +51,9 @@ public interface ProduitApi {
 
     @GetMapping(value="/produit/false/allFalse",produces = MediaType.APPLICATION_JSON_VALUE)
     List<ProduitDto> findAllFalse();
+
+    @GetMapping(value="/produit/livre",produces = MediaType.APPLICATION_JSON_VALUE)
+    List<ProduitDto> findBIsLivreTrue();
 
     @PatchMapping(value="/produit/update/service/{idProduit}/{idLigneProduit}/{idService}",produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<ProduitDto> updateService(@PathVariable("idProduit") Integer idProduit, @PathVariable("idLigneProduit") Integer idLigneProduit,@PathVariable("idService")  Integer idService);

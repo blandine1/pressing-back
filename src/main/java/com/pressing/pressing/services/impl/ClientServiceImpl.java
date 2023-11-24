@@ -40,6 +40,11 @@ public class ClientServiceImpl implements ClientService {
             throw new InvalidEntityException("le client existe deja", ErrorCode.CLIENT_ALREADY_EXIST, errors);
         }
 
+        if(!errors.isEmpty()){
+            log.error("le client existe deja {}", clientDto);
+            throw new InvalidEntityException("le client existe deja", ErrorCode.CLIENT_ALREADY_EXIST, errors);
+        }
+
         return ClientDto.fromEntity(clientRepository.save(ClientDto.toEntity(clientDto)));
     }
 

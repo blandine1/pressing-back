@@ -1,15 +1,11 @@
 package com.pressing.pressing.dto;
 
-import com.pressing.pressing.entity.Client;
-import com.pressing.pressing.entity.Ligneproduit;
 import com.pressing.pressing.entity.Produit;
 import lombok.Builder;
 import lombok.Data;
 import lombok.ToString;
 
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Data
@@ -20,6 +16,7 @@ public class ProduitDto {
     private Integer utilisateurid;
     private ClientDto client;
     private boolean status;
+    private boolean livre;
     private String description;
     private Timestamp creationDate;
     private Timestamp lastUpdatedDate;
@@ -34,6 +31,7 @@ public class ProduitDto {
       return ProduitDto.builder()
               .id(produit.getId())
               .status(produit.isStatus())
+              .livre(produit.isLivre())
               .utilisateurid(produit.getUtilisateurid())
               .description(produit.getDescription())
               .client(ClientDto.fromEntity(produit.getClient()))
@@ -51,6 +49,7 @@ public class ProduitDto {
         Produit produit = new Produit();
         produit.setId(produitDto.getId());
         produit.setStatus(produitDto.isStatus());
+        produit.setLivre(produitDto.isLivre());
         produit.setDescription(produitDto.getDescription());
         produit.setUtilisateurid(produitDto.getUtilisateurid());
         produit.setClient(ClientDto.toEntity(produitDto.getClient()));
