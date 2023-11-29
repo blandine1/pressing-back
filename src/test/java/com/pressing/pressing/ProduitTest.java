@@ -37,7 +37,7 @@ public class ProduitTest {
     
     @Test
     public void testSaveProduit(){
-        
+        System.out.println("test pour voir le ci cd");
        /* int serviceId=1;
         int clientId=1;
         Services services = serviceRepository.findById(serviceId).get();
