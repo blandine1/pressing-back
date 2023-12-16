@@ -16,10 +16,10 @@ import com.pressing.pressing.repository.*;
 import com.pressing.pressing.services.ProduitService;
 import com.pressing.pressing.validator.ProduitValidator;
 import com.pressing.pressing.validator.ServicesValidator;
-import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -107,9 +107,9 @@ public class ProduitServiceImpl implements ProduitService {
             throw new InvalidEntityException("le produit est invalide", ErrorCode.PRODUIT_NOT_VALID);
         }
 
-       /* if(!produitDto.isStatus() && produitDto.isLivre()){
-            throw new InvalidEntityException("Ce produit n'est pas encore payé", ErrorCode.PRODUIT_NOT_VALID);
-        }*/
+        if(produitDto.isPaye()){
+            produitDto.setStatus(true);
+        }
 
         List<String> servicesErrors = new ArrayList<>();
         if(produitDto.getListeLigneProduit() !=null){
@@ -257,8 +257,8 @@ public class ProduitServiceImpl implements ProduitService {
      * @return
      */
     @Override
-    public List<ProduitDto> findAllTrue() {
-        List<Produit> produitDtoList = produitRepository.findAllByLivreIsFalse();
+    public List<ProduitDto> findAllPayeTrue() {
+        List<Produit> produitDtoList = produitRepository.findAllProuitWithStatusPayeIsTrue();
         if (produitDtoList.isEmpty()){
             log.error("La liste est vide");
         }
@@ -270,13 +270,12 @@ public class ProduitServiceImpl implements ProduitService {
         return dtoList;
     }
 
-
     /**
      * recher avec le statut status est a faux
      * @return
      */
     @Override
-    public List<ProduitDto> findAllFalse() {
+    public List<ProduitDto> findAllStatusFalse() {
         List<Produit> produitDtoList = produitRepository.findAllByStatusIsFalse();
         if (produitDtoList.isEmpty()){
             log.error("La liste est vide");
@@ -291,7 +290,7 @@ public class ProduitServiceImpl implements ProduitService {
 
     @Override
     public List<ProduitDto> findBIsLivreTrue() {
-        List<Produit> produitDtoList = produitRepository.findAllByLivreIsTrue();
+        List<Produit> produitDtoList = produitRepository.findAllProuitWithStatusLivreIsTrue();
         if (produitDtoList.isEmpty()){
             log.error("La liste est vide");
         }

@@ -18,14 +18,14 @@ public interface ProduitRepository extends JpaRepository<Produit, Integer> {
     List<Produit> findAllAndIsLivreTrue(String phone);
 
 
-    @Query("select p from Produit p where p.livre=false order by p.creationDate desc")
-    List<Produit> findAllByLivreIsFalse();
-
     @Query("select p from Produit p where p.status=false order by p.creationDate desc")
     List<Produit> findAllByStatusIsFalse();
 
+    @Query("select p from Produit p where p.paye=true order by p.creationDate desc")
+    List<Produit> findAllProuitWithStatusPayeIsTrue();
+
     @Query("select p from Produit p where p.livre=true order by p.creationDate desc")
-    List<Produit> findAllByLivreIsTrue();
+    List<Produit> findAllProuitWithStatusLivreIsTrue();
 
 
     //@Query("select p from Produit p inner join Ligneproduit l on p.id=l.id_produit")
@@ -34,4 +34,5 @@ public interface ProduitRepository extends JpaRepository<Produit, Integer> {
 
     @Query("update Produit p set p.status = true where p.id=?1")
     Produit updateByStatusAndTrue(Integer id);
+
 }

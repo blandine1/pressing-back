@@ -46,11 +46,11 @@ public interface ProduitApi {
     @PatchMapping(value="/produit/update/{id}/{idClient}",produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<ProduitDto> updateClient(@PathVariable Integer id, @PathVariable Integer idClient);
 
-    @GetMapping(value="/produit/true/allTrue",produces = MediaType.APPLICATION_JSON_VALUE)
-    List<ProduitDto> findAllTrue();
+    @GetMapping(value="/produit/status/allFalse",produces = MediaType.APPLICATION_JSON_VALUE)
+    List<ProduitDto> findAllStatusFalse();
 
-    @GetMapping(value="/produit/false/allFalse",produces = MediaType.APPLICATION_JSON_VALUE)
-    List<ProduitDto> findAllFalse();
+    @GetMapping(value="/produit/paye/allTrue",produces = MediaType.APPLICATION_JSON_VALUE)
+    List<ProduitDto> findAllPayeTrue();
 
     @GetMapping(value="/produit/livre",produces = MediaType.APPLICATION_JSON_VALUE)
     List<ProduitDto> findBIsLivreTrue();

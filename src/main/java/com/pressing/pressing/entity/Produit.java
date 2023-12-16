@@ -28,6 +28,7 @@ public class Produit implements Serializable {
 
     //parvde defaut il doit etre a false
     private boolean status;
+    private boolean paye;
     private boolean livre;
 
     @Column(name = "utilisateur_id", nullable = false)
@@ -54,5 +55,4 @@ public class Produit implements Serializable {
     @OneToMany(mappedBy = "produit")
     private List<Ligneproduit> ligneproduits;
 
-    //private Integer idLigneProduit;
 }

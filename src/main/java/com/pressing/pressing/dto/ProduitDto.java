@@ -16,6 +16,7 @@ public class ProduitDto {
     private Integer utilisateurid;
     private ClientDto client;
     private boolean status;
+    private boolean paye;
     private boolean livre;
     private String description;
     private Timestamp creationDate;
@@ -31,6 +32,7 @@ public class ProduitDto {
       return ProduitDto.builder()
               .id(produit.getId())
               .status(produit.isStatus())
+              .paye(produit.isPaye())
               .livre(produit.isLivre())
               .utilisateurid(produit.getUtilisateurid())
               .description(produit.getDescription())
@@ -49,6 +51,7 @@ public class ProduitDto {
         Produit produit = new Produit();
         produit.setId(produitDto.getId());
         produit.setStatus(produitDto.isStatus());
+        produit.setPaye(produitDto.isPaye());
         produit.setLivre(produitDto.isLivre());
         produit.setDescription(produitDto.getDescription());
         produit.setUtilisateurid(produitDto.getUtilisateurid());

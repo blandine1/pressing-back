@@ -28,8 +28,8 @@ public interface ProduitService {
 
     ProduitDto deleteProduit(Integer idProduit, Integer idLigneProduit);
 
-    List<ProduitDto> findAllTrue();
-    List<ProduitDto> findAllFalse();
+    List<ProduitDto> findAllPayeTrue();
+    List<ProduitDto> findAllStatusFalse();
     List<ProduitDto> findBIsLivreTrue();
     List<ProduitDto> findAll();
 

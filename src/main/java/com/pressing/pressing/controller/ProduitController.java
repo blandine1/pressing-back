@@ -7,12 +7,14 @@ import com.pressing.pressing.services.ProduitService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
+@CrossOrigin(origins = "*")
 public class ProduitController implements ProduitApi {
     private final ProduitService produitService;
 
@@ -71,13 +73,13 @@ public class ProduitController implements ProduitApi {
     }
 
     @Override
-    public List<ProduitDto> findAllTrue() {
-        return  produitService.findAllTrue();
+    public List<ProduitDto> findAllPayeTrue() {
+        return  produitService.findAllPayeTrue();
     }
 
     @Override
-    public List<ProduitDto> findAllFalse() {
-        return produitService.findAllFalse();
+    public List<ProduitDto> findAllStatusFalse() {
+        return produitService.findAllStatusFalse();
     }
 
     @Override
